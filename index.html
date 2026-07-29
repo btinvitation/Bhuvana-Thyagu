@@ -16,13 +16,14 @@
     :root {
       --gold-light: #fcf6ba;
       --gold-main: #d4af37;
-      --gold-dark: #aa7c11;
-      --bg-dark: #050505;
+      --gold-dark: #8a6a1c;
+      --iron-dark: #080808;
+      --iron-light: #1a1a1a;
     }
 
     body, html {
       margin: 0; padding: 0;
-      background-color: var(--bg-dark);
+      background-color: var(--iron-dark);
       color: #fff;
       font-family: 'Montserrat', sans-serif;
       overflow-x: hidden; scroll-behavior: smooth;
@@ -51,88 +52,105 @@
     #tsparticles { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
     /* =========================================
-       1. REALISTIC 3D PALACE GATES
+       1. REALISTIC PALACE WROUGHT-IRON GATES
        ========================================= */
     #gate-wrapper {
       position: fixed; inset: 0; z-index: 9999;
       display: flex; justify-content: center; align-items: center;
-      background: #000; /* Dark void behind the doors */
+      background: #000;
     }
 
     #gate-container {
       width: 100%; height: 100%; display: flex;
-      perspective: 1800px; /* Strong 3D depth */
+      perspective: 2500px; /* Strong 3D depth */
       transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 2s ease 1.5s;
     }
 
-    /* The heavy swinging movement */
+    /* The camera flying through the gates */
     #gate-container.zoom-in {
-      transform: scale(2) translateZ(300px);
+      transform: scale(2.5) translateZ(500px);
       opacity: 0;
     }
 
-    /* The Realistic Door Design */
+    /* The Main Gate Structure */
     .gate {
-      width: 50%; height: 100%;
-      position: relative;
+      width: 50%; height: 100%; position: relative;
       transform-style: preserve-3d;
-      /* Heavy, slow ease to simulate massive weight */
       transition: transform 3.5s cubic-bezier(0.4, 0, 0.1, 1);
-      display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
-      box-shadow: inset 0 0 80px rgba(0,0,0,0.9);
+      background: linear-gradient(90deg, var(--iron-dark), var(--iron-light));
+      box-shadow: inset 0 0 100px rgba(0,0,0,1);
+    }
+
+    /* Wrought-Iron Gold Lattice Design */
+    .gate-lattice {
+      position: absolute; inset: 25px;
+      border: 6px solid var(--gold-main);
+      background-color: rgba(0, 0, 0, 0.6); /* Slightly see-through */
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(212,175,55,0.5) 30px, rgba(212,175,55,0.5) 34px),
+        repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(212,175,55,0.5) 30px, rgba(212,175,55,0.5) 34px);
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
     }
 
     .gate-left {
       transform-origin: left center;
-      background: linear-gradient(90deg, #0a0a0a 0%, #1a1a1a 80%, #2a2a2a 98%, var(--gold-main) 100%);
+      border-right: 10px solid var(--gold-dark); /* Thick meeting point */
+      box-shadow: 15px 0 50px rgba(0,0,0,1);
     }
+    
     .gate-right {
       transform-origin: right center;
-      background: linear-gradient(-90deg, #0a0a0a 0%, #1a1a1a 80%, #2a2a2a 98%, var(--gold-main) 100%);
+      border-left: 10px solid var(--gold-dark);
+      box-shadow: -15px 0 50px rgba(0,0,0,1);
     }
 
-    /* 3D Carved Door Panels */
-    .gate-panel {
-      width: 60%; height: 35%;
-      border: 2px solid var(--gold-dark);
-      background: #050505;
-      box-shadow: inset 0 0 30px #000, 0 15px 30px rgba(0,0,0,0.9);
-      position: relative;
-    }
-    .gate-panel::after {
-      content: ''; position: absolute; inset: 12px;
-      border: 1px dashed var(--gold-main); opacity: 0.4;
-    }
-
-    /* Golden Door Handles */
-    .door-handle {
-      position: absolute; top: 50%; width: 20px; height: 120px;
-      background: linear-gradient(to bottom, #fcf6ba, #d4af37, #aa7c11);
-      border-radius: 10px;
-      box-shadow: 5px 10px 20px rgba(0,0,0,0.9);
-      transform: translateY(-50%);
+    /* The Center Royal Medallion (Split in half) */
+    .gate-medallion {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 140px; height: 280px;
+      border: 8px solid var(--gold-main);
+      background: var(--iron-dark);
       z-index: 10;
     }
-    .gate-left .door-handle { right: 20px; }
-    .gate-right .door-handle { left: 20px; box-shadow: -5px 10px 20px rgba(0,0,0,0.9); }
+    .gate-left .gate-medallion {
+      right: -10px; /* Overlaps the thick border */
+      border-right: none;
+      border-radius: 150px 0 0 150px;
+      box-shadow: inset 15px 0 30px rgba(0,0,0,0.9);
+    }
+    .gate-right .gate-medallion {
+      left: -10px;
+      border-left: none;
+      border-radius: 0 150px 150px 0;
+      box-shadow: inset -15px 0 30px rgba(0,0,0,0.9);
+    }
 
-    /* Open State Classes (Triggered by JS) */
-    .gate-left.open { transform: rotateY(-110deg); }
-    .gate-right.open { transform: rotateY(110deg); }
+    /* Vertical Palace Bars */
+    .gate-bar {
+      position: absolute; top: 25px; bottom: 25px;
+      width: 12px; background: linear-gradient(to right, #664f14, var(--gold-main), #664f14);
+      box-shadow: 5px 0 10px rgba(0,0,0,0.8);
+    }
+    .gate-left .gate-bar:nth-child(2) { left: 30%; }
+    .gate-left .gate-bar:nth-child(3) { left: 60%; }
+    .gate-right .gate-bar:nth-child(2) { right: 30%; }
+    .gate-right .gate-bar:nth-child(3) { right: 60%; }
+
+    /* Open State Classes */
+    .gate-left.open { transform: rotateY(-105deg); }
+    .gate-right.open { transform: rotateY(105deg); }
 
     /* Cinematic Light Burst Effect */
     #light-burst {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 0px; height: 100vh;
-      background: #fff;
-      box-shadow: 0 0 50px 30px var(--gold-light), 0 0 150px 80px #fff;
+      width: 0px; height: 100vh; background: #fff;
+      box-shadow: 0 0 60px 40px var(--gold-light), 0 0 200px 100px #fff;
       opacity: 0; z-index: 9998; pointer-events: none;
     }
 
-    /* The Center Seal Container */
+    /* The Wax Seal Lock */
     .seal-container {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       z-index: 10000; display: flex; flex-direction: column; align-items: center;
     }
 
@@ -142,18 +160,16 @@
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       flex-direction: column; cursor: pointer;
       border: 4px solid var(--gold-main);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 15px 40px rgba(212,175,55,0.5);
-      animation: sealPulse 2s infinite alternate;
-      transition: transform 0.3s;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 15px 40px rgba(212,175,55,0.8);
+      animation: sealPulse 2s infinite alternate; transition: transform 0.3s;
     }
     .royal-seal:hover { transform: scale(1.05); }
     .royal-seal span { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--gold-main); text-shadow: 2px 2px 8px #000; }
     
     @keyframes sealPulse {
-      0% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.3); }
-      100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.9); }
+      0% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.4); }
+      100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 60px rgba(212,175,55,1); }
     }
-
 
     /* =========================================
        2. LUXURY MAIN CONTENT
@@ -171,55 +187,42 @@
     .hero-title { font-size: 3.8rem; line-height: 1.1; margin: 15px 0; }
     .hero-title span { font-size: 2rem; color: #fff; font-family: 'Cormorant Garamond', serif; font-style: italic; display: block; margin: 5px 0; }
 
-    /* Frosted Luxury Boxes */
     .luxury-box {
-      background: rgba(10, 10, 10, 0.7);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      border-top: 3px solid var(--gold-main);
-      padding: 45px 30px; width: 100%; box-sizing: border-box;
-      position: relative; margin-bottom: 35px;
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      background: rgba(10, 10, 10, 0.75); border: 1px solid rgba(212, 175, 55, 0.4);
+      border-top: 3px solid var(--gold-main); padding: 45px 30px; width: 100%; box-sizing: border-box;
+      position: relative; margin-bottom: 35px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
       box-shadow: 0 20px 50px rgba(0,0,0,0.9);
     }
     
     .framed-image {
       width: 100%; height: auto; max-height: 60vh; object-fit: contain; 
-      border: 1px solid var(--gold-main); padding: 8px; background: rgba(0,0,0,0.5);
+      border: 2px solid var(--gold-main); padding: 5px; background: rgba(0,0,0,0.8);
       margin-bottom: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
     }
 
-    /* Pure Gold Scratch Card */
     .scratch-wrapper {
-      position: relative; width: 260px; height: 260px; margin: 0 auto;
-      filter: drop-shadow(0 15px 30px rgba(212,175,55,0.2));
+      position: relative; width: 260px; height: 260px; margin: 0 auto; filter: drop-shadow(0 15px 30px rgba(212,175,55,0.2));
       -webkit-mask-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
       -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
     }
     #scratch-canvas { position: absolute; top: 0; left: 0; cursor: pointer; }
     .scratch-content {
       width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: #0a0a0a; color: var(--gold-light); padding: 20px; box-sizing: border-box;
-      border: 2px solid var(--gold-main); font-family: 'Cormorant Garamond', serif;
+      background: #0a0a0a; color: var(--gold-light); padding: 20px; box-sizing: border-box; border: 2px solid var(--gold-main); font-family: 'Cormorant Garamond', serif;
     }
 
-    /* Minimalist Timer */
     #timer { display: flex; justify-content: space-around; width: 100%; margin: 25px 0; }
     .time-block { text-align: center; }
     .time-block span { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; display: block; line-height: 1; }
     .time-block small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 3px; color: #aaa; margin-top: 8px; display: block; }
 
-    /* Premium Button */
     .btn {
-      display: inline-block; padding: 18px 45px;
-      background: linear-gradient(45deg, #b8860b, #ffd700, #b8860b);
-      background-size: 200% auto; color: #000; border: none;
-      text-decoration: none; text-transform: uppercase; letter-spacing: 3px;
-      font-size: 0.75rem; font-weight: 600; margin-top: 20px; transition: 0.5s;
-      box-shadow: 0 10px 20px rgba(212,175,55,0.3);
+      display: inline-block; padding: 18px 45px; background: linear-gradient(45deg, #b8860b, #ffd700, #b8860b);
+      background-size: 200% auto; color: #000; border: none; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;
+      font-size: 0.75rem; font-weight: 600; margin-top: 20px; transition: 0.5s; box-shadow: 0 10px 20px rgba(212,175,55,0.3);
     }
     .btn:hover { background-position: right center; box-shadow: 0 15px 30px rgba(212,175,55,0.6); }
 
-    /* Audio Toggle */
     #audio-control {
       position: fixed; bottom: 25px; right: 25px; z-index: 100;
       width: 50px; height: 50px; background: rgba(0,0,0,0.8);
@@ -232,47 +235,47 @@
 </head>
 <body>
 
-  <!-- Audio -->
   <audio id="bg-music" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/01/20/audio_1416eefdcb.mp3" type="audio/mpeg">
   </audio>
   <div id="audio-control" onclick="toggleAudio()">🎵</div>
 
-  <!-- Backgrounds for Main Content -->
   <div class="global-bg"></div>
   <div class="vignette"></div>
   <div id="tsparticles"></div>
 
-  <!-- 1. REALISTIC 3D GATE OPENING -->
+  <!-- 1. REALISTIC 3D PALACE GATE -->
   <div id="gate-wrapper">
     <div id="gate-container">
       
-      <!-- Left Door -->
+      <!-- Left Iron Gate -->
       <div class="gate gate-left">
-        <div class="gate-panel"></div>
-        <div class="gate-panel"></div>
-        <div class="door-handle"></div>
+        <div class="gate-lattice"></div>
+        <div class="gate-bar"></div>
+        <div class="gate-bar"></div>
+        <div class="gate-medallion"></div>
       </div>
       
-      <!-- Right Door -->
+      <!-- Right Iron Gate -->
       <div class="gate gate-right">
-        <div class="gate-panel"></div>
-        <div class="gate-panel"></div>
-        <div class="door-handle"></div>
+        <div class="gate-lattice"></div>
+        <div class="gate-bar"></div>
+        <div class="gate-bar"></div>
+        <div class="gate-medallion"></div>
       </div>
       
     </div>
     
-    <!-- Cinematic Light Burst -->
+    <!-- Magical Light Burst on Opening -->
     <div id="light-burst"></div>
 
-    <!-- The Lock / Seal -->
+    <!-- The Wax Seal Lock -->
     <div class="seal-container" id="seal-container">
-      <p style="color: var(--gold-main); letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 25px; text-align: center;">The Wedding Of</p>
+      <p style="color: var(--gold-main); letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 25px; text-align: center; text-shadow: 0 2px 5px #000;">The Royal Wedding</p>
       <div class="royal-seal" onclick="openGates()">
         <span>B&T</span>
       </div>
-      <p style="color: #aaa; letter-spacing: 3px; font-size: 0.6rem; text-transform: uppercase; margin-top: 25px; text-align: center;">Tap Seal To Enter</p>
+      <p style="color: #ccc; letter-spacing: 3px; font-size: 0.6rem; text-transform: uppercase; margin-top: 25px; text-align: center; text-shadow: 0 2px 5px #000;">Tap To Break Seal</p>
     </div>
   </div>
   
@@ -308,7 +311,6 @@
 
     <div class="section" data-aos="fade-up" data-aos-duration="1500">
       <h2 class="gold-text" style="margin-bottom: 40px; font-size: 2.5rem;">The Details</h2>
-      
       <div class="luxury-box" style="text-align: center;">
         <h3 style="font-size: 1.8rem; color: var(--gold-light);">Wedding Ceremony</h3>
         <p style="margin: 15px 0; color: #fff; font-size: 1.2rem; font-family: 'Cormorant Garamond', serif;">Sunday, August 30, 2026</p>
@@ -338,7 +340,6 @@
   </div>
 
   <script>
-    // 1. Gold Dust Particles
     tsParticles.load("tsparticles", {
       particles: {
         number: { value: 35 }, color: { value: "#d4af37" }, shape: { type: "circle" },
@@ -347,38 +348,29 @@
       }
     });
 
-    // 2. Ultra-Realistic 3D Door Sequence
     const bgMusic = document.getElementById("bg-music");
     let isPlaying = false;
 
     function openGates() {
-      // Step 1: Start Music
       bgMusic.play().catch(()=>{});
       isPlaying = true;
       document.getElementById("audio-control").style.display = "flex";
 
-      // Step 2: Break/Vanish the Wax Seal immediately
       gsap.to("#seal-container", { scale: 1.5, opacity: 0, duration: 0.6, ease: "power2.in" });
 
-      // Step 3: Crack open the heavy doors & trigger light burst
       setTimeout(() => {
         document.querySelector('.gate-left').classList.add('open');
         document.querySelector('.gate-right').classList.add('open');
-        
-        // Push the camera forward through the doors
         document.getElementById('gate-container').classList.add('zoom-in');
         
-        // Flash the golden light burst
         gsap.to("#light-burst", { opacity: 1, width: "100vw", duration: 1.5, ease: "power2.inOut" });
         gsap.to("#light-burst", { opacity: 0, duration: 1, delay: 1.2 });
       }, 400);
 
-      // Step 4: Fade in the actual invitation
       const mainContent = document.getElementById("main-content");
       mainContent.style.visibility = "visible";
       gsap.to(mainContent, { opacity: 1, duration: 2.5, delay: 1.5 });
       
-      // Step 5: Remove gates completely to allow scrolling
       setTimeout(() => { 
         document.getElementById("gate-wrapper").style.display = "none";
         AOS.init(); 
@@ -391,7 +383,6 @@
       else { bgMusic.play(); btn.innerText = "🎵"; isPlaying = true; }
     }
 
-    // 3. Countdown
     const eventDate = new Date("Aug 30, 2026 13:30:00").getTime();
     setInterval(() => {
       const now = new Date().getTime(); const diff = eventDate - now;
@@ -403,11 +394,8 @@
       }
     }, 1000);
 
-    // 4. Scratch Card
     const canvas = document.getElementById('scratch-canvas');
     const ctx = canvas.getContext('2d');
-    
-    // Metallic gold fill
     const grad = ctx.createLinearGradient(0, 0, 260, 260);
     grad.addColorStop(0, '#bf953f'); grad.addColorStop(0.5, '#fcf6ba'); grad.addColorStop(1, '#aa7c11');
     ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -422,7 +410,6 @@
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       const x = clientX - rect.left; const y = clientY - rect.top;
-      
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill();
     }
