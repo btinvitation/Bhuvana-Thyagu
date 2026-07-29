@@ -1,1 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhuvaneshwari & Thyagu | Royal Wedding Invitation</title>
+  
+  <!-- Libraries for Animations & Particles -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
+  
+  <!-- High-End Luxury Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f9f5e8;
+      --gold-dark: #997a00;
+      --midnight: #0a0b10;
+      --text-main: #dcdcdc;
+    }
+
+    body, html {
+      margin: 0; padding: 0;
+      background-color: var(--midnight);
+      color: var(--text-main);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden; scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, .luxury-font {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600; margin: 0;
+    }
+
+    /* BACKGROUND & VIGNETTE */
+    .global-bg {
+      position: fixed; inset: 0; width: 100%; height: 100vh;
+      /* FIXED FILE NAME */
+      background-image: url('assets/images/luxury-background.jpg.jpg');
+      background-size: cover; background-position: center; z-index: 0; 
+      opacity: 0.4; filter: grayscale(20%) sepia(30%) hue-rotate(350deg);
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(circle at center, transparent 20%, #000000 100%);
+    }
+    #tsparticles { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+    /* 1. THE GRAND GATE OPENING (COVER) */
+    #gate-wrapper {
+      position: fixed; inset: 0; z-index: 9999; overflow: hidden;
+    }
+    .gate-door {
+      position: absolute; top: 0; width: 50%; height: 100%;
+      /* FIXED FILE NAME */
+      background-image: url('assets/images/luxury-background.jpg.jpg');
+      background-size: 200% 100%; background-repeat: no-repeat;
+      z-index: 9998; transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .door-left {
+      left: 0; background-position: left center;
+      border-right: 2px solid var(--gold);
+      box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+    }
+    .door-right {
+      right: 0; background-position: right center;
+      border-left: 2px solid var(--gold);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+    }
+    .gate-darken { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
+
+    .gate-content {
+      position: absolute; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+
+    /* Royal Wax Seal */
+    .royal-seal {
+      width: 130px; height: 130px; margin-top: 30px;
+      background: radial-gradient(circle at 30% 30%, #8b0000, #4a0000);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; cursor: pointer;
+      box-shadow: inset 0 0 10px #000, 0 0 25px rgba(212, 175, 55, 0.5);
+      border: 3px solid var(--gold);
+      animation: breathe 2.5s infinite alternate;
+    }
+    .royal-seal span { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--gold); }
+    .royal-seal small { font-family: 'Montserrat', sans-serif; font-size: 0.55rem; color: #fff; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
+    @keyframes breathe {
+      0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+      100% { transform: scale(1.05); box-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
+    }
+
+    /* 2. MAIN SCROLLING CONTENT */
+    .container {
+      max-width: 500px; margin: 0 auto; padding-bottom: 60px;
+      opacity: 0; visibility: hidden; position: relative; z-index: 10;
+    }
+
+    .section {
+      min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 60px 25px; text-align: center; box-sizing: border-box;
+    }
+
+    .hero-title { font-size: 3.8rem; line-height: 1.1; margin: 15px 0; color: var(--gold); letter-spacing: 1px; }
+    .hero-title span { font-size: 2rem; color: #fff; font-family: 'Cormorant Garamond', serif; font-style: italic; }
+
+    /* Elegant Framed Boxes */
+    .framed-box {
+      background: rgba(10, 10, 15, 0.85);
+      border: 1px solid var(--gold);
+      padding: 40px 30px; width: 100%; box-sizing: border-box;
+      position: relative; margin-bottom: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+    .framed-box::before, .framed-box::after {
+      content: ''; position: absolute; width: 15px; height: 15px; border: 1px solid var(--gold);
+    }
+    .framed-box::before { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+    .framed-box::after { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+    .framed-image {
+      width: 100%; height: auto; max-height: 60vh; object-fit: contain; 
+      border: 2px solid var(--gold); padding: 5px; background: #000;
+      margin-bottom: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    }
+
+    /* Heart Scratch Card */
+    .scratch-wrapper {
+      position: relative; width: 260px; height: 260px; margin: 0 auto;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.9));
+      -webkit-mask-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+    }
+    #scratch-canvas { position: absolute; top: 0; left: 0; cursor: pointer; }
+    .scratch-content {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: var(--midnight); color: var(--gold-light); padding: 20px; box-sizing: border-box;
+      border: 1px solid var(--gold); font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Minimalist Timer */
+    #timer { display: flex; justify-content: center; gap: 15px; margin: 25px 0; }
+    .time-block { text-align: center; border-right: 1px solid rgba(212,175,55,0.3); padding-right: 15px; }
+    .time-block:last-child { border: none; padding-right: 0; }
+    .time-block span { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); display: block; line-height: 1; }
+    .time-block small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; margin-top: 5px; display: block; }
+
+    /* Rich Gold Button */
+    .btn {
+      display: inline-block; padding: 18px 45px;
+      background: transparent; color: var(--gold); border: 1px solid var(--gold);
+      text-decoration: none; text-transform: uppercase; letter-spacing: 3px;
+      font-size: 0.75rem; transition: all 0.4s ease; margin-top: 20px;
+    }
+    .btn:hover { background: var(--gold); color: #000; }
+
+    /* Audio Toggle */
+    #audio-control {
+      position: fixed; bottom: 25px; right: 25px; z-index: 100;
+      width: 45px; height: 45px; background: rgba(0,0,0,0.8);
+      border: 1px solid var(--gold); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.1rem; cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/01/20/audio_1416eefdcb.mp3" type="audio/mpeg">
+  </audio>
+  <div id="audio-control" onclick="toggleAudio()">🎵</div>
+
+  <!-- Global Background -->
+  <div class="global-bg"></div>
+  <div class="vignette"></div>
+  <div id="tsparticles"></div>
+
+  <!-- 1. THE GRAND GATE OPENING -->
+  <div id="gate-wrapper">
+    <div class="gate-door door-left"><div class="gate-darken"></div></div>
+    <div class="gate-door door-right"><div class="gate-darken"></div></div>
+    
+    <div class="gate-content" id="gate-content">
+      <p style="color: var(--gold); letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 20px;">The Wedding Of</p>
+      <h1 class="hero-title" style="font-size: 3rem; margin: 0;">Bhuvaneshwari<br><span style="font-size: 1.5rem; display: block; margin: 10px 0;">and</span>Thyagu</h1>
+      
+      <div class="royal-seal" onclick="openGates()">
+        <span>B&T</span>
+        <small>Tap to Enter</small>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 2. MAIN INVITATION CONTENT -->
+  <div class="container" id="main-content">
+    
+    <div class="section" data-aos="fade-up" data-aos-duration="2000">
+      <p style="letter-spacing: 4px; color: #aaa; font-size: 0.8rem; text-transform: uppercase;">You are invited</p>
+      <h1 class="hero-title">Bhuvaneshwari<br><span>&</span><br>Thyagu</h1>
+      <p style="margin-top: 10px; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold);">August 30, 2026</p>
+      <div style="height: 60px; width: 1px; background: var(--gold); margin-top: 30px;"></div>
+    </div>
+
+    <div class="section" data-aos="fade-up" data-aos-duration="1500">
+      <!-- FIXED FILE NAME -->
+      <img src="assets/images/invitation-card.jpg.JPG" class="framed-image" alt="Invitation Card">
+      <div class="framed-box">
+        <h2 style="font-size: 2.2rem; margin-bottom: 15px;">A Royal Celebration</h2>
+        <p style="line-height: 2; font-size: 0.95rem; color: #ccc;">We joyfully request the honor of your presence as we unite our lives in marriage, surrounded by the love of our family and friends.</p>
+      </div>
+    </div>
+
+    <div class="section" data-aos="fade-up" data-aos-duration="1500">
+      <h2 style="margin-bottom: 5px; font-size: 2.5rem;">A Golden Secret</h2>
+      <p style="margin-bottom: 40px; color: #aaa; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase;">Scratch to reveal</p>
+      <div class="scratch-wrapper">
+        <div class="scratch-content">
+          <span style="font-size: 1.2rem;">We can't wait!</span>
+          <br><br><span style="font-size: 1.5rem; color: #fff;">August 30, 2026</span>
+        </div>
+        <canvas id="scratch-canvas" width="260" height="260"></canvas>
+      </div>
+    </div>
+
+    <div class="section" data-aos="fade-up" data-aos-duration="1500">
+      <h2 style="margin-bottom: 40px; font-size: 2.5rem;">The Details</h2>
+      
+      <div class="framed-box" style="text-align: center;">
+        <h3 style="font-size: 1.8rem; color: var(--gold-light);">Wedding Ceremony</h3>
+        <p style="margin: 15px 0; color: #fff; font-size: 1.2rem; font-family: 'Cormorant Garamond', serif;">Sunday, August 30, 2026</p>
+        <p style="margin: 5px 0; color: var(--gold); letter-spacing: 2px; font-size: 0.9rem;">1:30 PM — 3:00 PM</p>
+        
+        <div style="width: 50px; height: 1px; background: rgba(212,175,55,0.5); margin: 25px auto;"></div>
+        
+        <h3 style="font-size: 1.8rem; color: var(--gold-light);">The Venue</h3>
+        <p style="line-height: 1.8; color: #ccc; margin-top: 15px;">Groom’s House<br>Kamaraj Nagar, Paramanandal<br>Chengam</p>
+        <a href="https://maps.app.goo.gl/mPHSN5Qt6RtdwrfE6?g_st=ic" target="_blank" class="btn">View on Map</a>
+      </div>
+
+      <div id="timer">
+        <div class="time-block"><span id="days">00</span><small>Days</small></div>
+        <div class="time-block"><span id="hours">00</span><small>Hrs</small></div>
+        <div class="time-block"><span id="mins">00</span><small>Min</small></div>
+        <div class="time-block"><span id="secs">00</span><small>Sec</small></div>
+      </div>
+    </div>
+
+    <div class="section" data-aos="zoom-in-up" data-aos-duration="1500">
+      <h2 style="margin-bottom: 40px; font-size: 2.5rem;">Our Memories</h2>
+      <img src="assets/images/photo1.jpg.PNG" class="framed-image" alt="Couple Photo 1">
+      <img src="assets/images/photo2.jpg.PNG" class="framed-image" alt="Couple Photo 2">
+    </div>
+
+  </div>
+
+  <script>
+    // 1. Particles
+    tsParticles.load("tsparticles", {
+      particles: {
+        number: { value: 35 },
+        color: { value: "#d4af37" },
+        shape: { type: "circle" },
+        opacity: { value: 0.6, random: true },
+        size: { value: 2, random: true },
+        move: { enable: true, speed: 0.5, direction: "top", outModes: "out" }
+      }
+    });
+
+    // 2. The Grand Gate Opening Animation
+    const bgMusic = document.getElementById("bg-music");
+    let isPlaying = false;
+
+    function openGates() {
+      // Play Audio
+      bgMusic.play().catch(()=>{});
+      isPlaying = true;
+      document.getElementById("audio-control").style.display = "flex";
+
+      // Fade out the seal and text
+      gsap.to("#gate-content", { opacity: 0, duration: 0.6 });
+
+      // Slide doors open
+      gsap.to(".door-left", { x: "-100%", duration: 2, ease: "power3.inOut", delay: 0.4 });
+      gsap.to(".door-right", { x: "100%", duration: 2, ease: "power3.inOut", delay: 0.4, 
+        onComplete: () => {
+          document.getElementById("gate-wrapper").style.display = "none";
+        }
+      });
+
+      // Fade in the main invitation from below
+      const mainContent = document.getElementById("main-content");
+      mainContent.style.visibility = "visible";
+      gsap.to(mainContent, { opacity: 1, duration: 2, delay: 1 });
+      
+      setTimeout(() => { AOS.init(); }, 1500);
+    }
+
+    function toggleAudio() {
+      const btn = document.getElementById("audio-control");
+      if (isPlaying) { bgMusic.pause(); btn.innerText = "🔇"; isPlaying = false; } 
+      else { bgMusic.play(); btn.innerText = "🎵"; isPlaying = true; }
+    }
+
+    // 3. Countdown
+    const eventDate = new Date("Aug 30, 2026 13:30:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+      if(diff > 0) {
+        document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("secs").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+      }
+    }, 1000);
+
+    // 4. Scratch Card
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Pure Gold fill for scratch card
+    ctx.fillStyle = '#d4af37'; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.font = '16px "Montserrat"';
+    ctx.fillStyle = '#000';
+    ctx.textAlign = 'center';
+    ctx.fillText('Scratch Here', canvas.width / 2, canvas.height / 2 + 5);
+    
+    let isDrawing = false;
+    function scratch(e) {
+      if (!isDrawing) return;
+      e.preventDefault(); 
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill();
+    }
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mousemove', scratch);
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }, {passive: false});
+    canvas.addEventListener('touchend', () => isDrawing = false);
+    canvas.addEventListener('touchmove', scratch, {passive: false});
+  </script>
+</body>
+</html>
 
