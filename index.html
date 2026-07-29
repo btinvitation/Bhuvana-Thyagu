@@ -51,46 +51,83 @@
     #tsparticles { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
     /* =========================================
-       1. TRUE 3D GRAND GATE OPENING
+       1. REALISTIC 3D PALACE GATES
        ========================================= */
     #gate-wrapper {
       position: fixed; inset: 0; z-index: 9999;
-      perspective: 1500px; /* This creates the 3D hinge effect */
-      display: flex;
+      display: flex; justify-content: center; align-items: center;
+      background: #000; /* Dark void behind the doors */
     }
 
+    #gate-container {
+      width: 100%; height: 100%; display: flex;
+      perspective: 1800px; /* Strong 3D depth */
+      transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 2s ease 1.5s;
+    }
+
+    /* The heavy swinging movement */
+    #gate-container.zoom-in {
+      transform: scale(2) translateZ(300px);
+      opacity: 0;
+    }
+
+    /* The Realistic Door Design */
     .gate {
       width: 50%; height: 100%;
-      background: linear-gradient(135deg, #111, #000);
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 2.5s cubic-bezier(0.64, 0.04, 0.15, 1);
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
-      display: flex; align-items: center;
+      /* Heavy, slow ease to simulate massive weight */
+      transition: transform 3.5s cubic-bezier(0.4, 0, 0.1, 1);
+      display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
+      box-shadow: inset 0 0 80px rgba(0,0,0,0.9);
     }
 
-    /* Left Gate Hinge */
     .gate-left {
       transform-origin: left center;
-      border-right: 4px solid var(--gold-main);
-      box-shadow: 10px 0 30px rgba(0,0,0,0.9);
+      background: linear-gradient(90deg, #0a0a0a 0%, #1a1a1a 80%, #2a2a2a 98%, var(--gold-main) 100%);
     }
-    /* Right Gate Hinge */
     .gate-right {
       transform-origin: right center;
-      border-left: 4px solid var(--gold-main);
-      box-shadow: -10px 0 30px rgba(0,0,0,0.9);
+      background: linear-gradient(-90deg, #0a0a0a 0%, #1a1a1a 80%, #2a2a2a 98%, var(--gold-main) 100%);
     }
 
-    /* Gate Inner Golden Details */
-    .gate::before {
-      content: ''; position: absolute; inset: 15px;
-      border: 1px solid rgba(212, 175, 55, 0.3); pointer-events: none;
+    /* 3D Carved Door Panels */
+    .gate-panel {
+      width: 60%; height: 35%;
+      border: 2px solid var(--gold-dark);
+      background: #050505;
+      box-shadow: inset 0 0 30px #000, 0 15px 30px rgba(0,0,0,0.9);
+      position: relative;
+    }
+    .gate-panel::after {
+      content: ''; position: absolute; inset: 12px;
+      border: 1px dashed var(--gold-main); opacity: 0.4;
     }
 
-    /* 3D Swing Classes (Triggered by JS) */
+    /* Golden Door Handles */
+    .door-handle {
+      position: absolute; top: 50%; width: 20px; height: 120px;
+      background: linear-gradient(to bottom, #fcf6ba, #d4af37, #aa7c11);
+      border-radius: 10px;
+      box-shadow: 5px 10px 20px rgba(0,0,0,0.9);
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+    .gate-left .door-handle { right: 20px; }
+    .gate-right .door-handle { left: 20px; box-shadow: -5px 10px 20px rgba(0,0,0,0.9); }
+
+    /* Open State Classes (Triggered by JS) */
     .gate-left.open { transform: rotateY(-110deg); }
     .gate-right.open { transform: rotateY(110deg); }
+
+    /* Cinematic Light Burst Effect */
+    #light-burst {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 0px; height: 100vh;
+      background: #fff;
+      box-shadow: 0 0 50px 30px var(--gold-light), 0 0 150px 80px #fff;
+      opacity: 0; z-index: 9998; pointer-events: none;
+    }
 
     /* The Center Seal Container */
     .seal-container {
@@ -99,23 +136,22 @@
       z-index: 10000; display: flex; flex-direction: column; align-items: center;
     }
 
-    /* Rich 3D Wax Seal */
     .royal-seal {
-      width: 130px; height: 130px;
-      background: radial-gradient(circle at 35% 35%, #7a0000, #300000);
+      width: 140px; height: 140px;
+      background: radial-gradient(circle at 35% 35%, #8a0000, #300000);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       flex-direction: column; cursor: pointer;
-      border: 3px solid var(--gold-main);
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 15px 35px rgba(212,175,55,0.4);
+      border: 4px solid var(--gold-main);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 15px 40px rgba(212,175,55,0.5);
       animation: sealPulse 2s infinite alternate;
       transition: transform 0.3s;
     }
     .royal-seal:hover { transform: scale(1.05); }
-    .royal-seal span { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: var(--gold-main); text-shadow: 1px 1px 5px #000; }
+    .royal-seal span { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--gold-main); text-shadow: 2px 2px 8px #000; }
     
     @keyframes sealPulse {
-      0% { box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.3); }
-      100% { box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 0 45px rgba(212,175,55,0.8); }
+      0% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 20px rgba(212,175,55,0.3); }
+      100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.9); }
     }
 
 
@@ -202,22 +238,41 @@
   </audio>
   <div id="audio-control" onclick="toggleAudio()">🎵</div>
 
-  <!-- Backgrounds -->
+  <!-- Backgrounds for Main Content -->
   <div class="global-bg"></div>
   <div class="vignette"></div>
   <div id="tsparticles"></div>
 
-  <!-- 1. TRUE 3D GATE OPENING -->
+  <!-- 1. REALISTIC 3D GATE OPENING -->
   <div id="gate-wrapper">
-    <div class="gate gate-left"></div>
-    <div class="gate gate-right"></div>
+    <div id="gate-container">
+      
+      <!-- Left Door -->
+      <div class="gate gate-left">
+        <div class="gate-panel"></div>
+        <div class="gate-panel"></div>
+        <div class="door-handle"></div>
+      </div>
+      
+      <!-- Right Door -->
+      <div class="gate gate-right">
+        <div class="gate-panel"></div>
+        <div class="gate-panel"></div>
+        <div class="door-handle"></div>
+      </div>
+      
+    </div>
     
+    <!-- Cinematic Light Burst -->
+    <div id="light-burst"></div>
+
+    <!-- The Lock / Seal -->
     <div class="seal-container" id="seal-container">
       <p style="color: var(--gold-main); letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 25px; text-align: center;">The Wedding Of</p>
       <div class="royal-seal" onclick="openGates()">
         <span>B&T</span>
       </div>
-      <p style="color: #aaa; letter-spacing: 3px; font-size: 0.6rem; text-transform: uppercase; margin-top: 25px; text-align: center;">Tap to Enter</p>
+      <p style="color: #aaa; letter-spacing: 3px; font-size: 0.6rem; text-transform: uppercase; margin-top: 25px; text-align: center;">Tap Seal To Enter</p>
     </div>
   </div>
   
@@ -292,35 +347,42 @@
       }
     });
 
-    // 2. 3D Gate Hinge Animation
+    // 2. Ultra-Realistic 3D Door Sequence
     const bgMusic = document.getElementById("bg-music");
     let isPlaying = false;
 
     function openGates() {
+      // Step 1: Start Music
       bgMusic.play().catch(()=>{});
       isPlaying = true;
       document.getElementById("audio-control").style.display = "flex";
 
-      // Fade out the seal quickly
-      gsap.to("#seal-container", { scale: 0.8, opacity: 0, duration: 0.5 });
+      // Step 2: Break/Vanish the Wax Seal immediately
+      gsap.to("#seal-container", { scale: 1.5, opacity: 0, duration: 0.6, ease: "power2.in" });
 
-      // Trigger the 3D CSS Hinge swing on the gates
+      // Step 3: Crack open the heavy doors & trigger light burst
       setTimeout(() => {
         document.querySelector('.gate-left').classList.add('open');
         document.querySelector('.gate-right').classList.add('open');
-      }, 200);
+        
+        // Push the camera forward through the doors
+        document.getElementById('gate-container').classList.add('zoom-in');
+        
+        // Flash the golden light burst
+        gsap.to("#light-burst", { opacity: 1, width: "100vw", duration: 1.5, ease: "power2.inOut" });
+        gsap.to("#light-burst", { opacity: 0, duration: 1, delay: 1.2 });
+      }, 400);
 
-      // Hide gates completely after animation
-      setTimeout(() => {
-        document.getElementById("gate-wrapper").style.display = "none";
-      }, 2500);
-
-      // Fade in the invitation content
+      // Step 4: Fade in the actual invitation
       const mainContent = document.getElementById("main-content");
       mainContent.style.visibility = "visible";
-      gsap.to(mainContent, { opacity: 1, duration: 2.5, delay: 1 });
+      gsap.to(mainContent, { opacity: 1, duration: 2.5, delay: 1.5 });
       
-      setTimeout(() => { AOS.init(); }, 1500);
+      // Step 5: Remove gates completely to allow scrolling
+      setTimeout(() => { 
+        document.getElementById("gate-wrapper").style.display = "none";
+        AOS.init(); 
+      }, 3500);
     }
 
     function toggleAudio() {
